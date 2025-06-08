@@ -12,6 +12,17 @@ export interface Aircraft {
   lastMaintenance?: string;
   nextMaintenance?: string;
   components: Component[];
+  // Novos campos
+  yearOfManufacture?: string;
+  maxTakeoffWeight?: number;
+  engineType?: string;
+  enginePower?: number;
+  fuelCapacity?: number;
+  maxPassengers?: number;
+  certificateType?: 'standard' | 'restricted' | 'experimental' | 'special';
+  insuranceExpiry?: string;
+  registrationExpiry?: string;
+  notes?: string;
 }
 
 export interface Component {

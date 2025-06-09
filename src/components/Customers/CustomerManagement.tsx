@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Plus, Search, Filter, Mail, Phone, User, Building, MapPin } from 'lucide-react';
+import { Plus, Search, Filter, Mail, Phone, User, Building, MapPin, Edit, Eye } from 'lucide-react';
 import { mockCustomers, mockAircraft } from '../../data/mockData';
 import { Customer } from '../../types';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { CustomerForm } from './CustomerForm';
 
 export const CustomerManagement: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>(mockCustomers);
   const [searchTerm, setSearchTerm] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
   const filteredCustomers = customers.filter(customer => {
     return customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -16,12 +18,47 @@ export const CustomerManagement: React.FC = () => {
            (customer.company && customer.company.toLowerCase().includes(searchTerm.toLowerCase()));
   });
 
+  const handleAddCustomer = (newCustomer: Omit<Customer, 'id'>) => {
+    const customer: Customer = {
+      ...newCustomer,
+      id: Date.now().toString(),
+    };
+    setCustomers(prev => [...prev, customer]);
+    setShowForm(false);
+  };
+
+  const handleEditCustomer = (updatedCustomer: Customer) => {
+    setCustomers(prev => prev.map(c => 
+      c.id === updatedCustomer.id ? updatedCustomer : c
+    ));
+    setEditingCustomer(null);
+  };
+
   const getCustomerAircraft = (customerId: string) => {
     const customer = customers.find(c => c.id === customerId);
     if (!customer) return [];
     
     return mockAircraft.filter(aircraft => customer.aircraftIds.includes(aircraft.id));
   };
+
+  if (showForm) {
+    return (
+      <CustomerForm
+        onSave={handleAddCustomer}
+        onCancel={() => setShowForm(false)}
+      />
+    );
+  }
+
+  if (editingCustomer) {
+    return (
+      <CustomerForm
+        customer={editingCustomer}
+        onSave={handleEditCustomer}
+        onCancel={() => setEditingCustomer(null)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -168,8 +205,15 @@ export const CustomerManagement: React.FC = () => {
 
               <div className="flex space-x-2 mt-6 pt-4 border-t border-gray-100">
                 <button className="flex-1 flex items-center justify-center px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors duration-200">
-                  <User className="h-4 w-4 mr-1" />
+                  <Eye className="h-4 w-4 mr-1" />
                   Perfil
+                </button>
+                <button 
+                  onClick={() => setEditingCustomer(customer)}
+                  className="flex-1 flex items-center justify-center px-3 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <Edit className="h-4 w-4 mr-1" />
+                  Editar
                 </button>
                 <button className="flex-1 flex items-center justify-center px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200">
                   <Mail className="h-4 w-4 mr-1" />

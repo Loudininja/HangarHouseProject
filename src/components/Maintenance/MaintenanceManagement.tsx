@@ -4,12 +4,15 @@ import { mockMaintenances, mockAircraft } from '../../data/mockData';
 import { Maintenance } from '../../types';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { MaintenanceForm } from './MaintenanceForm';
 
 export const MaintenanceManagement: React.FC = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>(mockMaintenances);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [showForm, setShowForm] = useState(false);
+  const [editingMaintenance, setEditingMaintenance] = useState<Maintenance | null>(null);
 
   const filteredMaintenances = maintenances.filter(maintenance => {
     const aircraft = mockAircraft.find(a => a.id === maintenance.aircraftId);
@@ -21,6 +24,22 @@ export const MaintenanceManagement: React.FC = () => {
     
     return matchesSearch && matchesStatus && matchesType;
   });
+
+  const handleAddMaintenance = (newMaintenance: Omit<Maintenance, 'id'>) => {
+    const maintenance: Maintenance = {
+      ...newMaintenance,
+      id: Date.now().toString(),
+    };
+    setMaintenances(prev => [...prev, maintenance]);
+    setShowForm(false);
+  };
+
+  const handleEditMaintenance = (updatedMaintenance: Maintenance) => {
+    setMaintenances(prev => prev.map(m => 
+      m.id === updatedMaintenance.id ? updatedMaintenance : m
+    ));
+    setEditingMaintenance(null);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -88,6 +107,25 @@ export const MaintenanceManagement: React.FC = () => {
     return null;
   };
 
+  if (showForm) {
+    return (
+      <MaintenanceForm
+        onSave={handleAddMaintenance}
+        onCancel={() => setShowForm(false)}
+      />
+    );
+  }
+
+  if (editingMaintenance) {
+    return (
+      <MaintenanceForm
+        maintenance={editingMaintenance}
+        onSave={handleEditMaintenance}
+        onCancel={() => setEditingMaintenance(null)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -95,7 +133,10 @@ export const MaintenanceManagement: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Controle de Manutenções</h1>
           <p className="text-gray-600">Agendamento e acompanhamento de revisões e reparos</p>
         </div>
-        <button className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+        <button 
+          onClick={() => setShowForm(true)}
+          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+        >
           <Plus className="h-5 w-5 mr-2" />
           Agendar Manutenção
         </button>
@@ -270,7 +311,10 @@ export const MaintenanceManagement: React.FC = () => {
                     <button className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200">
                       Visualizar
                     </button>
-                    <button className="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                    <button 
+                      onClick={() => setEditingMaintenance(maintenance)}
+                      className="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                    >
                       Editar
                     </button>
                   </div>
@@ -289,7 +333,10 @@ export const MaintenanceManagement: React.FC = () => {
               }
             </p>
             {!searchTerm && statusFilter === 'all' && typeFilter === 'all' && (
-              <button className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+              <button 
+                onClick={() => setShowForm(true)}
+                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
                 <Plus className="h-5 w-5 mr-2" />
                 Agendar Primeira Manutenção
               </button>

@@ -4,7 +4,21 @@ import { mockAircraft, mockMaintenances, mockComponents } from '../../data/mockD
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-export const Dashboard: React.FC = () => {
+interface DashboardProps {
+  onNavigate: (section: string) => void;
+  onOpenAircraftForm: () => void;
+  onOpenMaintenanceForm: () => void;
+  onOpenCustomerForm: () => void;
+  onOpenReports: () => void;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ 
+  onNavigate, 
+  onOpenAircraftForm, 
+  onOpenMaintenanceForm, 
+  onOpenCustomerForm, 
+  onOpenReports 
+}) => {
   const activeAircraft = mockAircraft.filter(a => a.status === 'active').length;
   const pendingMaintenances = mockMaintenances.filter(m => m.status === 'scheduled').length;
   const overdueMaintenance = mockComponents.filter(c => c.status === 'critical' || c.status === 'expired').length;
@@ -72,7 +86,7 @@ export const Dashboard: React.FC = () => {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-200 cursor-pointer">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.title}</p>
@@ -104,7 +118,7 @@ export const Dashboard: React.FC = () => {
               upcomingMaintenances.map((maintenance) => {
                 const aircraft = mockAircraft.find(a => a.id === maintenance.aircraftId);
                 return (
-                  <div key={maintenance.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={maintenance.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
                     <div>
                       <p className="font-medium text-gray-900">{aircraft?.registration}</p>
                       <p className="text-sm text-gray-600">{maintenance.description}</p>
@@ -139,7 +153,7 @@ export const Dashboard: React.FC = () => {
               criticalComponents.map((component) => {
                 const aircraft = mockAircraft.find(a => a.id === component.aircraftId);
                 return (
-                  <div key={component.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={component.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
                     <div>
                       <p className="font-medium text-gray-900">{component.name}</p>
                       <p className="text-sm text-gray-600">{aircraft?.registration}</p>
@@ -171,20 +185,35 @@ export const Dashboard: React.FC = () => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 transition-colors duration-200 group">
-            <Plane className="h-8 w-8 text-gray-400 group-hover:text-blue-500 mb-2" />
+          <button 
+            onClick={onOpenAircraftForm}
+            className="flex flex-col items-center p-6 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 group"
+          >
+            <Plane className="h-8 w-8 text-gray-400 group-hover:text-blue-500 mb-3" />
             <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600">Nova Aeronave</span>
           </button>
-          <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-green-400 hover:bg-green-50 transition-colors duration-200 group">
-            <Settings className="h-8 w-8 text-gray-400 group-hover:text-green-500 mb-2" />
+          
+          <button 
+            onClick={onOpenMaintenanceForm}
+            className="flex flex-col items-center p-6 rounded-xl border-2 border-dashed border-gray-300 hover:border-green-400 hover:bg-green-50 transition-all duration-200 group"
+          >
+            <Settings className="h-8 w-8 text-gray-400 group-hover:text-green-500 mb-3" />
             <span className="text-sm font-medium text-gray-600 group-hover:text-green-600">Agendar Manutenção</span>
           </button>
-          <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-purple-400 hover:bg-purple-50 transition-colors duration-200 group">
-            <User className="h-8 w-8 text-gray-400 group-hover:text-purple-500 mb-2" />
+          
+          <button 
+            onClick={onOpenCustomerForm}
+            className="flex flex-col items-center p-6 rounded-xl border-2 border-dashed border-gray-300 hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group"
+          >
+            <User className="h-8 w-8 text-gray-400 group-hover:text-purple-500 mb-3" />
             <span className="text-sm font-medium text-gray-600 group-hover:text-purple-600">Novo Cliente</span>
           </button>
-          <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-orange-400 hover:bg-orange-50 transition-colors duration-200 group">
-            <Bell className="h-8 w-8 text-gray-400 group-hover:text-orange-500 mb-2" />
+          
+          <button 
+            onClick={onOpenReports}
+            className="flex flex-col items-center p-6 rounded-xl border-2 border-dashed border-gray-300 hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 group"
+          >
+            <Bell className="h-8 w-8 text-gray-400 group-hover:text-orange-500 mb-3" />
             <span className="text-sm font-medium text-gray-600 group-hover:text-orange-600">Gerar Relatório</span>
           </button>
         </div>

@@ -111,11 +111,23 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentSection, user
                   </div>
                   
                   <div className="py-2">
-                    <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <button 
+                      onClick={() => {
+                        onNavigate('profile');
+                        setShowUserMenu(false);
+                      }}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
                       <User className="h-4 w-4 mr-3" />
                       Meu Perfil
                     </button>
-                    <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <button 
+                      onClick={() => {
+                        onNavigate('settings');
+                        setShowUserMenu(false);
+                      }}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
                       <Settings className="h-4 w-4 mr-3" />
                       Configurações
                     </button>
@@ -123,7 +135,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentSection, user
                   
                   <div className="border-t border-gray-100 py-2">
                     <button
-                      onClick={onLogout}
+                      onClick={() => {
+                        onLogout();
+                        setShowUserMenu(false);
+                      }}
                       className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                     >
                       <LogOut className="h-4 w-4 mr-3" />

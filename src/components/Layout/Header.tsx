@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plane, Bell, User, Settings, FileText, Mail, Globe, LogOut, ChevronDown } from 'lucide-react';
+import { Plane, Bell, User, Settings, FileText, Mail, Globe, LogOut, ChevronDown, Plus } from 'lucide-react';
 
 interface User {
   id: string;
@@ -21,6 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentSection, user
 
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Plane },
+    { id: 'unified-registration', label: 'Cadastro Inicial', icon: Plus },
     { id: 'aircraft', label: 'Aeronaves', icon: Plane },
     { id: 'maintenance', label: 'Manutenção', icon: Settings },
     { id: 'customers', label: 'Clientes', icon: User },

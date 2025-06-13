@@ -17,6 +17,7 @@ import { NotificationsManagement } from './components/Notifications/Notification
 import { ANACIntegration } from './components/ANAC/ANACIntegration';
 import { UserProfile } from './components/Profile/UserProfile';
 import { Settings } from './components/Settings/Settings';
+import { UnifiedRegistrationManagement } from './components/UnifiedRegistration/UnifiedRegistrationManagement';
 import { Aircraft, Customer, Maintenance } from './types';
 
 const AppContent: React.FC = () => {
@@ -157,6 +158,8 @@ const AppContent: React.FC = () => {
             onOpenReports={handleOpenReports}
           />
         );
+      case 'unified-registration':
+        return <UnifiedRegistrationManagement />;
       case 'aircraft':
         return <AircraftManagement />;
       case 'maintenance':

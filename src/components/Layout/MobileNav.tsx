@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plane, Settings, User, Bell, BarChart3, FileText, Mail, Globe } from 'lucide-react';
+import { Plane, Settings, User, Bell, BarChart3, FileText, Mail, Globe, Plus } from 'lucide-react';
 
 interface MobileNavProps {
   onNavigate: (section: string) => void;
@@ -9,6 +9,7 @@ interface MobileNavProps {
 export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentSection }) => {
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+    { id: 'unified-registration', label: 'Cadastro', icon: Plus },
     { id: 'aircraft', label: 'Aeronaves', icon: Plane },
     { id: 'maintenance', label: 'Manutenção', icon: Settings },
     { id: 'customers', label: 'Clientes', icon: User },
@@ -20,8 +21,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentSection
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-      <div className="grid grid-cols-4 gap-1">
-        {navigationItems.slice(0, 4).map((item) => {
+      <div className="grid grid-cols-5 gap-1">
+        {navigationItems.slice(0, 5).map((item) => {
           const Icon = item.icon;
           return (
             <button
@@ -40,7 +41,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentSection
         })}
       </div>
       <div className="grid grid-cols-4 gap-1 border-t border-gray-100">
-        {navigationItems.slice(4, 8).map((item) => {
+        {navigationItems.slice(5, 9).map((item) => {
           const Icon = item.icon;
           return (
             <button

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plane, AlertTriangle, CheckCircle, Clock, TrendingUp, Settings, User, Bell } from 'lucide-react';
+import { Plane, AlertTriangle, CheckCircle, Clock, TrendingUp, Settings, User, Bell, Plus } from 'lucide-react';
 import { mockAircraft, mockMaintenances, mockComponents } from '../../data/mockData';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -184,7 +184,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Quick Actions */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <button 
+            onClick={() => onNavigate('unified-registration')}
+            className="flex flex-col items-center p-6 rounded-xl border-2 border-dashed border-purple-300 hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group"
+          >
+            <Plus className="h-8 w-8 text-purple-400 group-hover:text-purple-500 mb-3" />
+            <span className="text-sm font-medium text-purple-600 group-hover:text-purple-700">Cadastro Inicial</span>
+          </button>
+          
           <button 
             onClick={onOpenAircraftForm}
             className="flex flex-col items-center p-6 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 group"
